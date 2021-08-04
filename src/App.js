@@ -12,12 +12,22 @@ function App() {
 
 	useEffect(() => {
 		const loadData = async () => {
-			const request = await axios.get("http://127.0.0.1:5000");
-			setDate1(Object.keys(request.data)[0]);
-			setDate2(Object.keys(request.data)[1]);
-			setDate3(Object.keys(request.data)[2]);
-			setIsLoading(false);
-			setResponse(request);
+			try {
+				const request = await axios.get(
+					"https://proton-flux-chart.herokuapp.com/api"
+					// "http://10.12.48.132:5000/api"
+				);
+				console.log(request.data);
+				const keys = Object.keys(request.data);
+
+				setDate1(keys[0]);
+				setDate2(keys[1]);
+				setDate3(keys[2]);
+				setResponse(request);
+				setIsLoading(false);
+			} catch (error) {
+				console.log(error);
+			}
 		};
 		loadData();
 	}, []);
@@ -32,8 +42,8 @@ function App() {
 					<div className="chartWrapper">
 						<div className="chartAreaWrapper">
 							<UserChart
-								data1={response.data.date1["flux10"]}
-								data2={response.data.date1["flux30"]}
+								data1={response.data[date1]["flux10"]}
+								data2={response.data[date1]["flux30"]}
 							/>
 						</div>
 					</div>
@@ -41,8 +51,8 @@ function App() {
 					<div className="chartWrapper">
 						<div className="chartAreaWrapper">
 							<UserChart
-								data1={response.data.date2["flux10"]}
-								data2={response.data.date2["flux30"]}
+								data1={response.data[date2]["flux10"]}
+								data2={response.data[date2]["flux30"]}
 							/>
 						</div>
 					</div>
@@ -50,8 +60,8 @@ function App() {
 					<div className="chartWrapper">
 						<div className="chartAreaWrapper">
 							<UserChart
-								data1={response.data.date3["flux10"]}
-								data2={response.data.date3["flux30"]}
+								data1={response.data[date3]["flux10"]}
+								data2={response.data[date3]["flux30"]}
 							/>
 						</div>
 					</div>

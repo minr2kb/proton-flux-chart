@@ -1,23 +1,27 @@
 import json
 from datetime import date, timedelta
 from urllib import request
+import os
 
 from flask import Flask
+import flask
 
-app = Flask("Proton-Flux-Chart")
+app = Flask(__name__)
 
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['JSON_AS_ASCII'] = False
 
 
 def urlMaker(n):
-    # url = 'ftp://ftp.swpc.noaa.gov/pub/lists/ace/'
-    # yesterday = date.today() - timedelta(n)
-    # temp = str(yesterday.strftime('%Y%m%d'))
-    # url = url + str(yesterday.strftime('%Y%m%d'))
-    # url = url + '_ace_sis_5m.txt'
-    url = "ftp://ftp.swpc.noaa.gov/pub/lists/ace/2021080" + str(
-        4 - n) + "_ace_sis_5m.txt"
+    url = 'ftp://ftp.swpc.noaa.gov/pub/lists/ace/'
+    yesterday = date.today() - timedelta(n + 1)
+    temp = str(yesterday.strftime('%Y%m%d'))
+    print(url)
+    url = url + str(yesterday.strftime('%Y%m%d'))
+    print(url)
+    url = url + '_ace_sis_5m.txt'
+    # url = "ftp://ftp.swpc.noaa.gov/pub/lists/ace/2021080" + str(
+    #     4 - n) + "_ace_sis_5m.txt"
     return url
 
 
@@ -51,18 +55,27 @@ def data2json():
                     })
                 data[date]["time"].append(int(line[3]))
                 data[date]["flux10_S"].append(int(line[6]))
-                data[date]["flux10"].append(float(line[7]))
+                if int(line[6]) > 0:
+                    data[date]["flux10"].append("null")
+                else:
+                    data[date]["flux10"].append(float(line[7]))
                 data[date]["flux30_S"].append(int(line[8]))
-                data[date]["flux30"].append(float(line[9]))
+                if int(line[8]) > 0:
+                    data[date]["flux30"].append("null")
+                else:
+                    data[date]["flux30"].append(float(line[9]))
         result = json.dumps(data, ensure_ascii=False)
     return result
 
 
-@app.route('/')
+@app.route('/api')
 def getData():
     data = data2json()
-    return data
+    resp = flask.Response(data)
+    resp.headers['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 
 if __name__ == "__main__":
-    app.run(debug=True, threaded=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, threaded=True, debug=True)

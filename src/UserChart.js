@@ -37,14 +37,14 @@ const UserChart = ({ data1, data2 }) => {
 						data: data1,
 						fill: false,
 						borderColor: "rgb(75, 192, 192)",
-						// tension: 0,
+						tension: 0,
 					},
 					{
 						label: "> 30 MeV",
 						data: data2,
 						fill: false,
 						borderColor: "rgb(75, 192, 50)",
-						// tension: 0,
+						tension: 0,
 					},
 				],
 			}}
