@@ -60,7 +60,7 @@ function App() {
 				</div>
 			) : (
 				<div>
-					<header>
+					<header style={{ marginLeft: "2rem" }}>
 						<h1>
 							Real-time Integral Flux of High-energy Solar Protons
 						</h1>

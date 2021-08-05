@@ -5,7 +5,7 @@ import "./App.css";
 const UserChart = ({ date, label, data1, data2 }) => {
 	return (
 		<div style={{ marginTop: "3rem" }}>
-			<h2>{date}</h2>
+			<h2 style={{ marginLeft: "2rem" }}>{date}</h2>
 			<div className="chartWrapper">
 				<div className="chartAreaWrapper">
 					<Line
