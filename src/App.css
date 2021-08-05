@@ -6,6 +6,19 @@ h4 {
 	margin-left: 2rem;
 }
 
+.loadingContainer {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	height: 100vh;
+}
+
+.footer {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 2rem;
+}
+
 .chartWrapper {
 	margin-left: 2rem;
 	margin-right: 2rem;
@@ -17,4 +30,5 @@ h4 {
 
 .chartAreaWrapper {
 	width: 2000px;
+	/* color: rgb(75, 192, 192); */
 }
