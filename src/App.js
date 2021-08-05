@@ -43,7 +43,7 @@ function App() {
 				setTime(request.data["UCTtime"]);
 				setResponse(request.data);
 				setIsLoading(false);
-				setTimeout(async () => await loadData(), 60000);
+				setTimeout(async () => await loadData(), 300000);
 			} catch (error) {
 				console.log(error);
 			}
