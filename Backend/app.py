@@ -1,5 +1,5 @@
 import json
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from urllib import request
 import os
 
@@ -14,11 +14,8 @@ app.config['JSON_AS_ASCII'] = False
 
 def urlMaker(n):
     url = 'ftp://ftp.swpc.noaa.gov/pub/lists/ace/'
-    yesterday = date.today() - timedelta(n + 1)
-    temp = str(yesterday.strftime('%Y%m%d'))
-    print(url)
-    url = url + str(yesterday.strftime('%Y%m%d'))
-    print(url)
+    yesterday = datetime.utcnow() - timedelta(n)
+    url = url + "".join(str(yesterday)[:10].split("-"))
     url = url + '_ace_sis_5m.txt'
     # url = "ftp://ftp.swpc.noaa.gov/pub/lists/ace/2021080" + str(
     #     4 - n) + "_ace_sis_5m.txt"
@@ -33,7 +30,7 @@ def download(n):
 
 
 def data2json():
-    data = {}
+    data = {"UCTtime": str(datetime.utcnow())[:-7]}
     for i in range(2, -1, -1):
         file = download(i)
         lines = file.split("\n")
@@ -44,16 +41,20 @@ def data2json():
             else:
                 line = ' '.join(line.split())
                 line = line.split(' ')
-                date = line[0] + line[1] + line[2]
+                date = line[0] + "-" + line[1] + "-" + line[2]
                 data.setdefault(
-                    date, {
-                        "time": [],
+                    date,
+                    {
+                        # "time": [],
                         "flux10_S": [],
                         "flux10": [],
                         "flux30_S": [],
                         "flux30": []
                     })
-                data[date]["time"].append(int(line[3]))
+                # data[date]["time"].append(line[0] + "-" + line[1] + "-" +
+                #                           line[2] + " " + line[3][:-2] + ":" +
+                #                           line[3][-2:])
+                # data[date]["time"].append(line[3][:-2] + ":" + line[3][-2:])
                 data[date]["flux10_S"].append(int(line[6]))
                 if int(line[6]) > 0:
                     data[date]["flux10"].append("null")
@@ -64,6 +65,7 @@ def data2json():
                     data[date]["flux30"].append("null")
                 else:
                     data[date]["flux30"].append(float(line[9]))
+        # data.setdefault("uctTime", str(datetime.utcnow()))
         result = json.dumps(data, ensure_ascii=False)
     return result
 
