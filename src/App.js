@@ -78,6 +78,7 @@ function App() {
 								display: "flex",
 								alignItems: "center",
 								marginTop: "-1.2rem",
+								flexWrap: "wrap",
 							}}
 						>
 							<h4>
