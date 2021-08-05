@@ -4,7 +4,7 @@ import axios from "axios";
 import UserChart from "./UserChart";
 import timeLabel from "./timeLabel";
 import BeatLoader from "react-spinners/BeatLoader";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 const Button = styled.button`
 	margin-left: 1rem;
